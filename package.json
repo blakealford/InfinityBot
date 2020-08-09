@@ -1,0 +1,24 @@
+{
+  "name": "infinity",
+  "version": "1.0.0",
+  "description": "A simple all aorund moderation, utility, and fun bot for everyone. ",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZyloTheDev/InfinityBot.git"
+  },
+  "author": "Zylo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ZyloTheDev/InfinityBot/issues"
+  },
+  "homepage": "https://github.com/ZyloTheDev/InfinityBot#readme",
+  "dependencies": {
+    "discord.js": "^12.2.0",
+    "moment": "^2.27.0",
+    "mongoose": "^5.9.28"
+  }
+}
