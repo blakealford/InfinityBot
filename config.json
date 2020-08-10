@@ -3,5 +3,7 @@
     "prefix": "?",
     "MainColour": "#6273B4",
     "GreenColour": "#51BE87",
-    "RedColour": "#C34F4F"
+    "RedColour": "#C34F4F",
+    "YelloColour": "#f2e066",
+    "AquaColour": "#41f2b4"
 }

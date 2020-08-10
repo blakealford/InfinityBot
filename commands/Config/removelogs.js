@@ -1,14 +1,14 @@
-const config = require("../../config.json");
 const { MessageEmbed } = require("discord.js");
+const config = require("../../config.json");
 const mongoose = require("mongoose");
-const Guild = require("../../models/guild");
 const logChannel = require("../../models/logchannel");
-
+const Guild = require("../../models/guild");
 module.exports = {
-  name: "setlogs",
+  name: "removelogs",
   category: "Config",
-  description: "Sets the log channel for your server",
+  description: "Removes the log channel for the server",
   run: async (client, message, args) => {
+   
       const settings = await Guild.findOne(
         {
           guildID: message.guild.id,
@@ -30,8 +30,6 @@ module.exports = {
           }
         }
       );
-      let channel =
-        message.mentions.channels.first() || client.channels.cache.get(args[0]);
       const embed1 = new MessageEmbed()
         .setDescription(
           "<:xmark:741885103545778236> You don't have the correct permissions to use this command."
@@ -44,42 +42,31 @@ module.exports = {
         )
         .setColor(config.RedColour);
 
-      const embed3 = new MessageEmbed()
-        .setDescription(
-          "<:xmark:741885103545778236> You need to sepcify a channel."
-        )
-        .setColor(config.RedColour);
-
       if (!message.member.hasPermission("MANAGE_GUILD")) {
         return message.channel.send(embed1);
       }
       if (!message.guild.me.hasPermission("MANAGE_GUILD")) {
         message.channel.send(embed2);
       }
+      let channel =
+        message.mentions.channels.first() || client.channels.cache.get(args[0]);
 
-      if (!channel) {
-        return message.channel.send(embed3);
-      }
-      logChannel.findOne({ serverID: message.guild.id }, async (err, data) => {
-        if (!data) {
-          let newLogs = new logChannel({
-            serverName: message.guild.name,
-            serverID: message.guild.id,
-            logChannelID: channel.id,
-          });
-          const embed = new MessageEmbed()
-            .setDescription(
-              `<:check:741884530344067124> Log Channel set to ${channel}`
-            )
-            .setColor(config.GreenColour);
+      await logChannel.deleteOne(
+        { serverID: message.guild.id },
+        async (err, data) => {
+          if (!data) {
+            const NoData = new MessageEmbed()
+              .setDescription(
+                `A log channel has not be set for \`${message.guild.name}\`. To set one run \`${settings.prefix}setmlogs\`.`
+              )
+              .setColor(config.GreenColour);
+          } else {
+            let Deletedembed = new MessageEmbed()
+              .setDescription(
+                `<:check:741884530344067124> I have disabled logs for \`${message.guild.name}\`, to re enable run \`${settings.prefix}setlogs\``
+              )
+              .setColor(config.GreenColour);
 
-          message.channel.send(embed);
-          newLogs.save();
-        } else {
-          let existsembed = new MessageEmbed()
-            .setDescription(
-              `<:NVInfo:717581337598492702> ${channel} is the current logging channel. To remove the log channel do \`${settings.prefix}removelogs\``
-            )
-            .setColor(config.MainColour);
-          message.channel.send(existsembed);
-        }})}}
+            message.channel.send(Deletedembed);
+            logChannel.deleteOne();
+          }})}}
