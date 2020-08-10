@@ -63,12 +63,14 @@ module.exports = {
 
             let embed2 = new MessageEmbed()
               .setAuthor(user.tag, avatar)
+              .setTitle("User Warned")
+              .setFooter(`Date: ${new Intl.DateTimeFormat(
+                "en-US"
+              ).format(Date.now())}`)
               .setDescription(
-                `**Moderator:** ${message.author} *[ID ${
-                  message.author.id
-                }]*\n**Member:** ${user} *[ID ${
-                  user.id
-                }]*\n**Reason:** \`⚠️\`||${args
+                `**Moderator:** ${message.author} *[ID ${message.author.id}]*
+                \n**Member:** ${user} *[ID ${user.id}]*
+                \n**Reason:** \`⚠️\`||${args
                   .slice(1)
                   .join(" ")}||\n**Warnings:** This is their __first__ warning.`
               )
@@ -97,19 +99,30 @@ module.exports = {
 
             let embed1 = new MessageEmbed()
               .setAuthor(user.tag, avatar)
+              .setTitle("User Warned")
+              .setTimestamp()
+              .setFooter(`Date: ${new Intl.DateTimeFormat(
+                "en-US"
+              ).format(Date.now())}`)
               .setDescription(
-                `**Moderator:** ${message.author} *[ID ${
-                  message.author.id
-                }]*\n**Member:** ${user} *[ID ${
-                  user.id
-                }]*\n**Reason:** \`⚠️\`||${args
+                `**Moderator:** ${
+                  message.author 
+                } *[ID ${message.author.id}]*\n**Member:** ${user} *[ID ${user.id}]*\n**Reason:** \`⚠️\`||${args
                   .slice(1)
-                  .join(" ")}||\n**Warnings:** They now have __${data.Warns.length}__ warning(s)`
+                  .join(" ")}||\n**Warnings:** They now have __${
+                  data.Warns.length
+                }__ warning(s)`
               )
-              .setColor(config.MainColour);
+              .setColor(config.RedColour);
+
             data.save();
             message.channel.send(embed98);
             Lchannel.send(embed1);
+            user.send(
+              `You were warned in ${message.guild.name} for: ${args
+                .slice(1)
+                .join(" ")}`
+            );
           }
         }
       );

@@ -22,20 +22,21 @@ if (!user) return message.channel.send(`No user specified!`);
         return message.channel.send(noactive)
         let avatar = user.user.displayAvatarURL({ dynamic: true, size: 512 });
         let Embed = new MessageEmbed()
-        .setAuthor(`*${user.user.tag} Infractions*`, avatar)
-          .setColor(config.MainColour)
           .setDescription(
             data.map((d) => {
               return d.Warns.map(
                 (w, i) =>
-                  `**Warn** **__${i}__**\n *\`[Moderator:]\`* ${
+                  `**Warn** **__${i}__**\n **Moderator:** ${
                     message.guild.members.cache.get(w.Moderator).user
-                  }\n *\`[Reason:]\`* ${
+                  } **Reason:** ${
                     w.Reason
-                  }\n• [\`remove\`](https://www.youtube.com/watch?v=dQw4w9WgXcQ)`
+                  }`
               ).join("\n");
             })
-          );
+          ).setAuthor(`Warnings For ${user.user.tag}`, avatar)
+          .setColor(config.MainColour)
+          .setFooter(`ID ${user.id}`)
+          
 
         message.channel.send(Embed);
       }
