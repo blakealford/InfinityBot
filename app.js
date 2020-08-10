@@ -76,7 +76,7 @@ client.on("message", async (message) => {
   let _1 = new discord.MessageEmbed()
     .setColor(roleColor)
     .setDescription(
-      `The current prefix in ${message.guild.name} is \`${settings.prefix}\`. To chnage this prefix run \`${settings.prefix}prefix\`.`
+      `The current prefix in **${message.guild.name}** is \`${settings.prefix}\`. To chnage this prefix run \`${settings.prefix}prefix\`.`
     );
 
   if (
