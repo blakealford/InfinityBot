@@ -10,7 +10,7 @@ module.exports = {
   run: async (client, message, args) => {
     await logs.findOne({ serverID: message.guild.id }, async (err, data1) => {
       const Lchannel = message.guild.channels.cache.get(data1.logChannelID);
-    });
+  
     const settings = await Guild.findOne(
       {
         guildID: message.guild.id,
@@ -62,7 +62,7 @@ module.exports = {
     if (!message.member.hasPermission("MANAGE_MESSAGES")) {
       message.channel.send(ban1);
     }
-    let user = message.mentions.users.first() || message.author;
+    let user = message.mentions.members.first() || message.member;
     let reason = message.content.split(" ").slice(2).join(" ");
     if (user.id === message.author.id) return message.channel.send(embed3);
     if (user.id === client.user.id) return message.channel.send(embed4);
@@ -77,9 +77,6 @@ module.exports = {
         await logs.findOne(
           { serverID: message.guild.id },
           async (err, data) => {
-            const Lchannel = message.guild.channels.cache.get(
-              data.logChannelID
-            );
 
             let muterole = message.guild.roles.cache.get(data1.roleID);
             let muted = new MessageEmbed()
@@ -87,7 +84,7 @@ module.exports = {
                 `<:check:741884530344067124> **${user.tag}** has been muted.`
               )
               .setColor(config.GreenColour);
-            let avatar = user.displayAvatarURL();
+            let avatar = user.user.displayAvatarURL()
 
             if (!data) {
               message.channel.send(muted);
@@ -103,7 +100,7 @@ module.exports = {
               );
 
               const muted2 = new MessageEmbed()
-                .setAuthor(`${user.tag}`, avatar)
+                .setAuthor(`${member.tag}`, avatar)
                 .setTimestamp()
                 .setFooter(
                   `Date: ${new Intl.DateTimeFormat("en-US").format(Date.now())}`
@@ -111,7 +108,7 @@ module.exports = {
                 .setTitle("User Muted")
                 .setDescription(
                   `**Moderator:** ${message.author} *[ID ${message.author.id}]*
-                \n**Member:** ${user} *[ID ${user.id}]*\n**Reason:** \`⚠️\`||${reason}||
+                \n**Member:** ${user.user} *[ID ${user.user.id}]*\n**Reason:** \`⚠️\`||${reason}||
               `
                 )
                 .setColor(config.YellowColour);
@@ -122,4 +119,5 @@ module.exports = {
       }
     );
   },
-};
+
+    )}}
