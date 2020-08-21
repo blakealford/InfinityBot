@@ -2,7 +2,7 @@ const { MessageEmbed, Message } = require("discord.js");
 const config = require("../../config.json");
 let muted = require("../../models/muterole");
 let logs = require("../../models/logchannel");
-let Guild = require('../../models/guild')
+let Guild = require("../../models/guild");
 module.exports = {
   name: "mute",
   category: "Moderation",
@@ -68,48 +68,58 @@ module.exports = {
     if (user.id === client.user.id) return message.channel.send(embed4);
     if (!user) return message.channel.send(embed);
     if (!reason) reason = "No reason provided";
-    let muterole = await muted.findOne({ serverID: message.guild.id }, async (err, data1) => {
-      if (!data1) {
-        message.channel.send(embed5);
-      }
-      await logs.findOne({ serverID: message.guild.id }, async (err, data) => {
-        const Lchannel = message.guild.channels.cache.get(data.logChannelID);
-
-        let muterole = message.guild.roles.cache.get(data1.roleID);
-        let muted = new MessageEmbed()
-          .setDescription(
-            `<:check:741884530344067124> **${user.tag}** has been muted.`
-          )
-          .setColor(config.GreenColour);
-        let avatar = user.displayAvatarURL();
-
-        if (!data) {
-          message.channel.send(muted);
-          user.roles.add(muterole);
+    await muted.findOne(
+      { serverID: message.guild.id },
+      async (err, data1) => {
+        if (!data1) {
+          message.channel.send(embed5);
         }
-        if ((data, data1)) {
-          user.roles.add(muterole);
+        await logs.findOne(
+          { serverID: message.guild.id },
+          async (err, data) => {
+            const Lchannel = message.guild.channels.cache.get(
+              data.logChannelID
+            );
 
-          message.channel.send(muted);
+            let muterole = message.guild.roles.cache.get(data1.roleID);
+            let muted = new MessageEmbed()
+              .setDescription(
+                `<:check:741884530344067124> **${user.tag}** has been muted.`
+              )
+              .setColor(config.GreenColour);
+            let avatar = user.displayAvatarURL();
 
-          user.send(`You were muted in ${message.guild.name} for: ${reason}`);
+            if (!data) {
+              message.channel.send(muted);
+              user.roles.add(muterole);
+            }
+            if ((data, data1)) {
+              user.roles.add(muterole);
 
-          const muted2 = new MessageEmbed()
-            .setAuthor(`${user.tag}`, avatar)
-            .setTimestamp()
-            .setFooter(
-              `Date: ${new Intl.DateTimeFormat("en-US").format(Date.now())}`
-            )
-            .setTitle("User Muted")
-            .setDescription(
-              `**Moderator:** ${message.author} *[ID ${message.author.id}]*
+              message.channel.send(muted);
+
+              user.send(
+                `You were muted in ${message.guild.name} for: ${reason}`
+              );
+
+              const muted2 = new MessageEmbed()
+                .setAuthor(`${user.tag}`, avatar)
+                .setTimestamp()
+                .setFooter(
+                  `Date: ${new Intl.DateTimeFormat("en-US").format(Date.now())}`
+                )
+                .setTitle("User Muted")
+                .setDescription(
+                  `**Moderator:** ${message.author} *[ID ${message.author.id}]*
                 \n**Member:** ${user} *[ID ${user.id}]*\n**Reason:** \`⚠️\`||${reason}||
               `
-            )
-            .setColor(config.YellowColour);
-          Lchannel.send(muted2);
-        }
-      });
-    });
+                )
+                .setColor(config.YellowColour);
+              Lchannel.send(muted2);
+            }
+          }
+        );
+      }
+    );
   },
 };

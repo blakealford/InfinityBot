@@ -2,7 +2,6 @@ const { MessageEmbed } = require("discord.js");
 const config = require("../../config.json");
 const mongoose = require("mongoose");
 const Guild = require("../../models/guild");
-const { info } = require("../../../../../Desktop/arismaarisma-master/commands/help");
 
 module.exports = {
   name: "help",
